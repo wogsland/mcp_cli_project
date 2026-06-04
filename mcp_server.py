@@ -1,3 +1,4 @@
+from typing import Annotated
 from mcp.server.fastmcp import FastMCP
 
 mcp = FastMCP("DocumentMCP", log_level="ERROR")
@@ -12,13 +13,25 @@ docs = {
     "spec.txt": "These specifications define the technical requirements for the equipment.",
 }
 
+
 @mcp.tool(name="read_doc", description="Read the contents of a document by its ID.")
-def read_doc(doc_id: str) -> str:
+def read_doc(doc_id: Annotated[str, "The filename of the document to read, e.g. 'deposition.md'"]) -> str:
     if doc_id not in docs:
         return f"Document '{doc_id}' not found."
     return docs[doc_id]
 
-# TODO: Write a tool to edit a doc
+
+@mcp.tool(name="edit_doc", description="Edit the contents of a document by its ID.")
+def edit_doc(
+    doc_id: Annotated[str, "The filename of the document to edit, e.g. 'deposition.md'"],
+    content: Annotated[str, "The new contents to replace the document with"],
+) -> str:
+    if doc_id not in docs:
+        return f"Document '{doc_id}' not found."
+    docs[doc_id] = content
+    return f"Document '{doc_id}' updated successfully."
+
+
 # TODO: Write a resource to return all doc id's
 # TODO: Write a resource to return the contents of a particular doc
 # TODO: Write a prompt to rewrite a doc in markdown format
