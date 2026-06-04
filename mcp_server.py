@@ -1,5 +1,6 @@
 from typing import Annotated
 from mcp.server.fastmcp import FastMCP
+from mcp.server.fastmcp.prompts import base
 
 mcp = FastMCP("DocumentMCP", log_level="ERROR")
 
@@ -54,8 +55,21 @@ def get_doc(doc_id: str) -> str:
     return docs[doc_id]
 
 
-# TODO: Write a prompt to rewrite a doc in markdown format
-# TODO: Write a prompt to summarize a doc
+@mcp.prompt(
+    name="format",
+    description="Rewrite a document in markdown format."
+)
+def rewrite_as_markdown(doc_id: str) -> str:
+    content = docs.get(doc_id, f"Document '{doc_id}' not found.")
+    return f"Please rewrite the following document in markdown format:\n\n{content}"
+
+
+@mcp.prompt(name="summarize", description="Summarize a document.")
+def summarize_doc(doc_id: str) -> list[base.Message]:
+    content = docs.get(doc_id, f"Document '{doc_id}' not found.")
+    return [
+        base.UserMessage(f"Please provide a concise summary of the following document:\n\n{content}")
+    ]
 
 
 if __name__ == "__main__":
