@@ -99,6 +99,14 @@ Commands will auto-complete when you press Tab.
 
 Edit the `mcp_server.py` file to add new documents to the `docs` dictionary.
 
+### Inspecting the MCP Server
+
+To open the MCP Inspector in the browser:
+
+```
+mcp dev mcp_server.py
+```
+
 ### Implementing MCP Features
 
 To fully implement the MCP features:
